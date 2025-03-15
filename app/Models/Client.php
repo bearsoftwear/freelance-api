@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Project extends Model
+class Client extends Model
 {
-    /** @use HasFactory<\Database\Factories\ProjectFactory> */
+    /** @use HasFactory<\Database\Factories\ClientFactory> */
     use HasFactory, SoftDeletes;
-
-    protected $fillable = ['user_id', 'client_id', 'name', 'description', 'status'];
+    
+    protected $fillable = ['user_id', 'name', 'email', 'phone', 'address', 'company'];
 
     protected $hidden = ['user_id', 'created_at', 'updated_at', 'deleted_at'];
 
@@ -22,8 +22,8 @@ class Project extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function tasks(): HasMany
+    public function projects(): HasMany
     {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(Project::class);
     }
 }

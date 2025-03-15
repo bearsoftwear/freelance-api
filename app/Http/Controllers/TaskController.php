@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Project;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
-class ProjectController extends Controller
+class TaskController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Project::with('user')->paginate(10);
+        return Task::with('user', 'project')->paginate(10);
     }
 
     /**
@@ -23,60 +22,63 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'project_id' => 'required|exists:projects,id',
             'user_id' => 'required|exists:users,id',
-            'client_id' => 'required|exists:clients,id',
-            'name' => 'required|string|min:3',
+            'title' => 'required|string|max:255',
             'description' => 'required|string|max:255',
+            'due_date' => 'required|date',
         ]);
 
-        $request->user()->projects()->create($validated);
+        $request->user()->tasks()->create($validated);
 
         return response()->json([
-            'message' => 'Project created successfully',
+            'message' => 'Task created successfully',
         ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Project $project)
+    public function show(Task $task)
     {
-        return $project;
+        return $task;
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Project $project)
+    public function update(Request $request, Task $task)
     {
-        Gate::authorize('update', $project);
+        Gate::authorize('update', $task);
 
         $validated = $request->validate([
+            'project_id' => 'required|exists:projects,id',
             'user_id' => 'required|exists:users,id',
-            'client_id' => 'required|exists:clients,id',
-            'name' => 'required|string|min:3',
+            'title' => 'required|string|max:255',
             'description' => 'required|string|max:255',
             'status' => 'required|in:pending,in_progress,completed,cancelled',
+            'due_date' => 'required|date',
+            'priority' => 'required|in:low,medium,high',
         ]);
 
-        $project->update($validated);
+        $task->update($validated);
 
         return response()->json([
-            'message' => 'Project updated successfully'
+            'message' => 'Task updated successfully'
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Project $project)
+    public function destroy(Task $task)
     {
-        Gate::authorize('delete', $project);
+        Gate::authorize('delete', $task);
 
-        $project->delete();
+        $task->delete();
 
         return response()->json([
-            'message' => 'Project deleted successfully',
+            'message' => 'Task deleted successfully',
         ]);
     }
 }

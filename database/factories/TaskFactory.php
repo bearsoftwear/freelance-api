@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Client;
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Project>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Task>
  */
-class ProjectFactory extends Factory
+class TaskFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,11 +19,13 @@ class ProjectFactory extends Factory
     public function definition(): array
     {
         return [
+            'project_id' => Project::inRandomOrder()->first()->id,
             'user_id' => User::inRandomOrder()->first()->id,
-            'client_id' => Client::inRandomOrder()->first()->id,
-            'name' => fake()->jobTitle(),
+            'title' => fake()->jobTitle(),
             'description' => fake()->realText(),
             'status' => fake()->randomElement(['pending', 'in_progress', 'completed', 'cancelled']),
+            'due_date' => fake()->dateTimeThisMonth(),
+            'priority' => fake()->randomElement(['low', 'medium', 'high']),
         ];
     }
 }
