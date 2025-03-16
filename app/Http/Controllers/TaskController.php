@@ -26,13 +26,17 @@ class TaskController extends Controller
             'user_id' => 'required|exists:users,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:255',
+            'status' => 'required|in:pending,in_progress,completed,cancelled',
             'due_date' => 'required|date',
+            'priority' => 'required|in:low,medium,high',
+            'cost' => 'required|numeric',
         ]);
 
-        $request->user()->tasks()->create($validated);
+        $task = $request->user()->tasks()->create($validated);
 
         return response()->json([
             'message' => 'Task created successfully',
+            'id' => $task->id,
         ], 201);
     }
 
@@ -41,7 +45,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        return $task;
+        return $task->load('user', 'project');
     }
 
     /**
@@ -59,12 +63,14 @@ class TaskController extends Controller
             'status' => 'required|in:pending,in_progress,completed,cancelled',
             'due_date' => 'required|date',
             'priority' => 'required|in:low,medium,high',
+            'cost' => 'required|numeric',
         ]);
 
         $task->update($validated);
 
         return response()->json([
-            'message' => 'Task updated successfully'
+            'message' => 'Task updated successfully',
+            'id' => $task->id,
         ]);
     }
 

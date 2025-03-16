@@ -23,8 +23,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@admin.com',
         ]);
 
-        Client::factory()->count(100)->create();
-        Project::factory()->count(100)->create();
+        Client::factory()->count(10)->create();
+        Project::factory()->count(10)->create();
         Task::factory()->count(100)->create();
     }
 }

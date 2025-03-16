@@ -24,16 +24,17 @@ class ClientController extends Controller
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'name' => 'required|string',
-            'email' => 'required|email|unique:clients,email',
-            'phone' => 'required|string',
+            'email' => 'required|email:rfc,dns|unique:clients,email',
+            'phone' => 'required|string|digits:12|unique:clients,phone',
             'address' => 'required|string',
-            'company name' => 'required|string',
+            'company' => 'required|string',
         ]);
 
-        $request->user()->clients()->create($validated);
+        $client = $request->user()->clients()->create($validated);
 
         return response()->json([
             'message' => 'Client created successfully',
+            'id' => $client->id,
         ], 201);
     }
 
@@ -42,7 +43,7 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
-        return $client;
+        return $client->load('user');
     }
 
     /**
@@ -55,16 +56,17 @@ class ClientController extends Controller
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'name' => 'required|string',
-            'email' => 'required|email|unique:clients,email',
-            'phone' => 'required|string',
+            'email' => 'required|email:rfc,dns|unique:clients,email',
+            'phone' => 'required|string|digits:12|unique:clients,phone',
             'address' => 'required|string',
-            'company name' => 'required|string',
+            'company' => 'required|string',
         ]);
 
         $client->update($validated);
 
         return response()->json([
-            'message' => 'Client updated successfully'
+            'message' => 'Client updated successfully',
+            'id' => $client->id,
         ]);
     }
 

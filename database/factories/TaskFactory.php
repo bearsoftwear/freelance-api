@@ -26,6 +26,7 @@ class TaskFactory extends Factory
             'status' => fake()->randomElement(['pending', 'in_progress', 'completed', 'cancelled']),
             'due_date' => fake()->dateTimeThisMonth(),
             'priority' => fake()->randomElement(['low', 'medium', 'high']),
+            'cost' => fake()->randomFloat(0, 0, 1000),
         ];
     }
 }

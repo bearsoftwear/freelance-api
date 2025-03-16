@@ -15,5 +15,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('projects', \App\Http\Controllers\ProjectController::class);
     Route::apiResource('tasks', \App\Http\Controllers\TaskController::class);
+    Route::apiResource('clients', \App\Http\Controllers\ClientController::class);
+    Route::get('invoice/projects/{project}', [\App\Http\Controllers\InvoiceController::class, 'generate']);
     /*other*/
 });

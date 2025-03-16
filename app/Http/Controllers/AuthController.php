@@ -42,18 +42,27 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
-                'message' => 'The provided credentials are incorrect.',
-                401
+                'message' => 'The provided credentials are incorrect.'
+            ], 401);
+        }
+
+        // Check if user already has a token
+        $existingToken = $user->tokens()->where('name', $request->email)->first();
+
+        if ($existingToken) {
+            return response()->json([
+                'message' => "Already logged in.",
+                'user' => $user,
             ]);
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        // Create a new token if none exists
+        $token = $user->createToken($request->email)->plainTextToken;
 
         return response()->json([
             'token' => $token,
             'user' => $user,
         ]);
-        /*TODO if already login not send token*/
     }
 
     public function logout(Request $request)

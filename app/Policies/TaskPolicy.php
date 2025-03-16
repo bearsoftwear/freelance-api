@@ -37,7 +37,7 @@ class TaskPolicy
      */
     public function update(User $user, Task $task): Response
     {
-        return $user->id === $task->id
+        return $user->id === $task->user_id
             ? Response::allow()
             : Response::deny('You are not authorized to update this task');
     }

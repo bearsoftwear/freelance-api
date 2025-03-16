@@ -15,7 +15,7 @@ class Project extends Model
 
     protected $fillable = ['user_id', 'client_id', 'name', 'description', 'status'];
 
-    protected $hidden = ['user_id', 'created_at', 'updated_at', 'deleted_at'];
+    protected $hidden = ['user_id', 'client_id', 'created_at', 'updated_at', 'deleted_at'];
 
     public function user(): BelongsTo
     {
@@ -25,5 +25,10 @@ class Project extends Model
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
+    }
+
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(Client::class);
     }
 }

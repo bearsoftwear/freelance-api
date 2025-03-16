@@ -14,7 +14,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return Project::with('user')->paginate(10);
+        return Project::with('user', 'client')->paginate(10);
     }
 
     /**
@@ -29,10 +29,11 @@ class ProjectController extends Controller
             'description' => 'required|string|max:255',
         ]);
 
-        $request->user()->projects()->create($validated);
+        $project = $request->user()->projects()->create($validated);
 
         return response()->json([
             'message' => 'Project created successfully',
+            'id' => $project->id,
         ], 201);
     }
 
@@ -41,7 +42,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        return $project;
+        return $project->load('user', 'client');
     }
 
     /**
@@ -62,7 +63,8 @@ class ProjectController extends Controller
         $project->update($validated);
 
         return response()->json([
-            'message' => 'Project updated successfully'
+            'message' => 'Project updated successfully',
+            'id' => $project->id,
         ]);
     }
 

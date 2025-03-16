@@ -12,7 +12,7 @@ class Task extends Model
     /** @use HasFactory<\Database\Factories\TaskFactory> */
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['project_id', 'user_id', 'title', 'description', 'status', 'due_date', 'priority'];
+    protected $fillable = ['project_id', 'user_id', 'title', 'description', 'status', 'due_date', 'priority', 'cost'];
 
     protected $hidden = ['project_id', 'user_id', 'created_at', 'updated_at', 'deleted_at'];
 

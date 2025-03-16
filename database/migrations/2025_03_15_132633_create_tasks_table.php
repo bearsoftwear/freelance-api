@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('status', ['pending', 'in_progress', 'completed', 'cancelled'])->default('pending');
             $table->dateTime('due_date')->nullable();
             $table->enum('priority', ['low', 'medium', 'high'])->default('low');
+            $table->decimal('cost', 8, 0)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
